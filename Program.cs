@@ -4,6 +4,7 @@ class Program
 {
     static void Main(string[] args)
     {
+        Console.Clear();
         int inputChoice = 0;
         while (inputChoice != 3)
         {
@@ -20,8 +21,7 @@ class Program
                     user.ValidatePassword();
                     break;
                 case 2:
-                    user.LogIn();
-                    user.TwoFactorAuthentication();
+                    user1.LogIn();
                     break;
                 case 3:
                     Console.WriteLine("Exiting the program. Goodbye!");
@@ -31,6 +31,5 @@ class Program
                     break;
             }
         }
-
     }
 }

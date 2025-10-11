@@ -98,11 +98,15 @@ public class User
         if (Username == inputUsername && Password == inputPassword)
         {
             Console.WriteLine("Login successful!");
+            TwoFactorAuthentication();
         }
+
         else
         {
-            Console.WriteLine("Invalid username or password.");
+            Console.WriteLine("Invalid username or password. Press any key to continue...");
         }
+        Console.ReadKey();
+        Console.Clear();
     }
 
     public void TwoFactorAuthentication()
