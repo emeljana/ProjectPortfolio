@@ -1,0 +1,33 @@
+using Twilio.Rest.Api.V2010.Account.Recording;
+
+public class Quest
+{
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public int DueDate { get; set; }
+    public int Priority { get; set; }
+    public bool IsCompleted { get; set; }
+
+    public List<Quest> collection = new List<Quest>();
+    public Quest(string title, string description, int dueDate, int priority)
+    {
+        Title = title;
+        Description = description;
+        DueDate = dueDate;
+        Priority = priority;
+        IsCompleted = false;
+    }
+
+    public void ShowAllQuest()
+    {
+        foreach (var quest in collection)
+        {
+            System.Console.WriteLine("Title: " + quest.Title);
+            System.Console.WriteLine("Description: " + quest.Description);
+            System.Console.WriteLine("Due Date: " + quest.DueDate);
+            System.Console.WriteLine("Priority: " + quest.Priority);
+            System.Console.WriteLine("Is Completed: " + quest.IsCompleted);
+        }
+    }
+
+}

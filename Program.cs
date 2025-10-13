@@ -9,19 +9,19 @@ class Program
         while (inputChoice != 3)
         {
             Console.WriteLine("Hello, welcome to the Adventure Game!");
-            User user = new User(); // Use parameterless constructor for interactive creation
-            User user1 = new User("julia12345", "Julia12345!", "emeliecaroline.halgh99@gmail.com", 1234567890);
+            Authenticator authenticator = new Authenticator();
 
-            user.ShowMenu();
+            MenuHelper menuHelper = new MenuHelper();
+            menuHelper.ShowMenu();
             inputChoice = Convert.ToInt32(Console.ReadLine());
             switch (inputChoice)
             {
                 case 1:
-                    user.CreateUser();
-                    user.ValidatePassword();
+                    authenticator.CreateUser();
+                    authenticator.ValidatePassword();
                     break;
                 case 2:
-                    user1.LogIn();
+                    authenticator.LogIn();
                     break;
                 case 3:
                     Console.WriteLine("Exiting the program. Goodbye!");
