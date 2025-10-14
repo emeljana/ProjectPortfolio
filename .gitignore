@@ -1,0 +1,22 @@
+# Build results
+bin/
+obj/
+
+# User secrets and sensitive config files
+appsettings.*.json
+appsettings.local.json
+secrets.json
+
+# Environment files
+.env
+.env.local
+
+# Visual Studio / VS Code
+.vs/
+.vscode/
+*.user
+*.suo
+
+# OS generated files
+.DS_Store
+Thumbs.db
