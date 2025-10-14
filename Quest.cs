@@ -4,12 +4,12 @@ public class Quest
 {
     public string Title { get; set; }
     public string Description { get; set; }
-    public int DueDate { get; set; }
+    public DateTime DueDate { get; set; }
     public int Priority { get; set; }
     public bool IsCompleted { get; set; }
 
-    public List<Quest> collection = new List<Quest>();
-    public Quest(string title, string description, int dueDate, int priority)
+    public List<Quest> questList = new List<Quest>();
+    public Quest(string title, string description, DateTime dueDate, int priority)
     {
         Title = title;
         Description = description;
@@ -17,10 +17,9 @@ public class Quest
         Priority = priority;
         IsCompleted = false;
     }
-
     public void ShowAllQuest()
     {
-        foreach (var quest in collection)
+        foreach (var quest in questList)
         {
             System.Console.WriteLine("Title: " + quest.Title);
             System.Console.WriteLine("Description: " + quest.Description);

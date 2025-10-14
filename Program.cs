@@ -19,9 +19,11 @@ class Program
                 case 1:
                     authenticator.CreateUser();
                     authenticator.ValidatePassword();
+                    menuHelper.ShowQuestMenu();
                     break;
                 case 2:
                     authenticator.LogIn();
+                    menuHelper.ShowQuestMenu();
                     break;
                 case 3:
                     Console.WriteLine("Exiting the program. Goodbye!");
