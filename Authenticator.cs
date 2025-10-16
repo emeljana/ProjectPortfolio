@@ -9,50 +9,86 @@ using Twilio;
 using Twilio.Types;
 using Twilio.Rest.Api.V2010.Account;
 
-public class Authenticator : User
+public class Authenticator
 {
-    private List<User> usersList = new List<User>();
-    public void CreateUser()
+    public static List<User> usersList = new List<User>();
+
+    public Authenticator()
+    {
+        usersList.Add(new User("Sara", "Sara123!", "emeliecaroline99@gmail.com"));
+        usersList.Add(new User("John", "John123!", "john@example.com"));
+        usersList.Add(new User("Alice", "Alice123!", "alice@example.com"));
+    }
+    User user = new User("", "", "");
+    MenuHelper menuHelper = new MenuHelper();
+    QuestManagment questManagment = new QuestManagment();
+
+    public User? CreateUser() // Return the created user
     {
         Console.Write("Enter your username: ");
-        Username = Console.ReadLine() ?? "";
+        user.Username = Console.ReadLine() ?? "";
 
         Console.Write("Enter your password: ");
-        Password = Console.ReadLine() ?? "";
+        user.Password = Console.ReadLine() ?? "";
 
         Console.Write("Enter your email: ");
-        Email = Console.ReadLine() ?? "";
+        user.Email = Console.ReadLine() ?? "";
 
-        usersList.Add(this);
-        Console.WriteLine("Hi " + Username + "! Your account has been created.");
-        Console.ReadKey();
+        // If createUser is true, procced to ShowQuestMenu
+        if (ValidatePassword(user))
+        {
+            usersList.Add(user);
+            Console.WriteLine("Hi " + user.Username + "! Your account has been created.");
+            return user; // Return the created user
+        }
+        return null; // Return null if validation failed
     }
 
-    public void ValidatePassword()
+    public bool ValidatePassword(User user)
     {
-        if (Password.Length < 6)
+        while (true)
         {
-            Console.WriteLine("Password must be at least 6 characters long.");
-        }
-        if (!Password.Any(char.IsUpper))
-        {
-            Console.WriteLine("Password must contain at least one uppercase letter.");
-        }
-        if (!Password.Any(char.IsLower))
-        {
-            Console.WriteLine("Password must contain at least one lowercase letter.");
-        }
-        if (!Password.Any(char.IsDigit))
-        {
-            Console.WriteLine("Password must contain at least one digit.");
-        }
-        if (!Password.Any(ch => !char.IsLetterOrDigit(ch)))
-        {
-            Console.WriteLine("Password must contain at least one special character.");
+            bool correctPassword = true;
+            if (user.Password.Length < 6)
+            {
+                Console.WriteLine("Password must be at least 6 characters long.");
+                correctPassword = false;
+            }
+            if (!user.Password.Any(char.IsUpper))
+            {
+                Console.WriteLine("Password must contain at least one uppercase letter.");
+                correctPassword = false;
+            }
+            if (!user.Password.Any(char.IsLower))
+            {
+                Console.WriteLine("Password must contain at least one lowercase letter.");
+                correctPassword = false;
+            }
+            if (!user.Password.Any(char.IsDigit))
+            {
+                Console.WriteLine("Password must contain at least one digit.");
+                correctPassword = false;
+            }
+            if (!user.Password.Any(ch => !char.IsLetterOrDigit(ch)))
+            {
+                Console.WriteLine("Password must contain at least one special character.");
+                correctPassword = false;
+            }
+            if (correctPassword)
+            {
+                return correctPassword; // Return true if password is valid
+            }
+            else
+            {
+                Console.Write("Please enter a valid password: ");
+                user.Password = Console.ReadLine() ?? "";
+                Console.WriteLine("Valid password. Press any key to continue...");
+                Console.Read();
+            }
         }
     }
 
-    public void LogIn()
+    public User? LogIn() // Return the logged-in user, ? means it can be null
     {
         Console.Write("Enter your username: ");
         string inputUsername = Console.ReadLine() ?? "";
@@ -67,18 +103,20 @@ public class Authenticator : User
         if (searchUser != null)
         {
             Console.WriteLine("Login successful!");
-            TwoFactorAuthentication();
+            /*TwoFactorAuthentication();*/
+            return searchUser; // Return the actual logged-in user
         }
 
         else
         {
             Console.WriteLine("Invalid username or password. Press any key to continue...");
+            Console.Read();
+            return null; // Return null if login fails
         }
-        Console.ReadKey();
-        Console.Clear();
     }
+}
 
-    public void TwoFactorAuthentication()
+    /*public void TwoFactorAuthentication()
     {
         // Generate a random code
         var random = new Random();
@@ -93,13 +131,13 @@ public class Authenticator : User
 
         if (inputCode == code)
         {
-            Console.WriteLine("Login successful!");
+            Console.WriteLine("Login successful! Press any key to continue to Quest Menu.");
         }
         else
         {
             Console.WriteLine("Invalid code.");
         }
-        Console.ReadKey();
+        Console.Read();
     }
 
     private void SendEmail(string toEmail, string newCode)
@@ -120,8 +158,7 @@ public class Authenticator : User
             smtp.EnableSsl = true;
             smtp.Credentials = new NetworkCredential(AppConfig.FromEmail, AppConfig.EmailPassword);
             smtp.Send(message);
-
         }
         Console.WriteLine("Email sent.");
     }
-}
+}*/
