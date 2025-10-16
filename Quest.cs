@@ -8,7 +8,6 @@ public class Quest
     public int Priority { get; set; }
     public bool IsCompleted { get; set; }
 
-    public List<Quest> questList = new List<Quest>();
     public Quest(string title, string description, DateTime dueDate, int priority)
     {
         Title = title;
@@ -17,9 +16,9 @@ public class Quest
         Priority = priority;
         IsCompleted = false;
     }
-    public void ShowAllQuest()
+    public void ShowAllQuest(QuestManagment questManagment)
     {
-        foreach (var quest in questList)
+        foreach (var quest in questManagment.ToDoList)
         {
             System.Console.WriteLine("Title: " + quest.Title);
             System.Console.WriteLine("Description: " + quest.Description);
@@ -28,5 +27,6 @@ public class Quest
             System.Console.WriteLine("Is Completed: " + quest.IsCompleted);
         }
     }
-
 }
+
+
