@@ -5,11 +5,11 @@ public class QuestManagment
 
     public QuestManagment()
     {
-        ToDoList.Add(new Quest("Slay the Dragon", "Defeat the dragon terrorizing the village", new DateTime(2025, 10, 23), 5));
-        ToDoList.Add(new Quest("Rescue the Princess", "Save the princess from the evil warlock", new DateTime(2025, 11, 15), 4));
-        ToDoList.Add(new Quest("Find the Lost Artifact", "Locate and retrieve the ancient artifact", new DateTime(2025, 12, 5), 3));
-        ToDoList.Add(new Quest("Explore the Haunted Forest", "Investigate the mysterious occurrences in the forest", new DateTime(2025, 10, 30), 2));
-        ToDoList.Add(new Quest("Find the lost Crown", "Locate the royal crown stolen from the castle treasury.", new DateTime(2025, 11, 20), 5));
+        ToDoList.Add(new Quest("Slay the Dragon", "Defeat the dragon terrorizing the village", new DateTime(2025, 10, 18), 5));
+        ToDoList.Add(new Quest("Rescue the Princess", "Save the princess from the evil warlock", new DateTime(2025, 10, 18), 4));
+        ToDoList.Add(new Quest("Find the Lost Artifact", "Locate and retrieve the ancient artifact", new DateTime(2025, 10, 18), 3));
+        ToDoList.Add(new Quest("Explore the Haunted Forest", "Investigate the mysterious occurrences in the forest", new DateTime(2025, 10, 18), 2));
+        ToDoList.Add(new Quest("Find the lost Crown", "Locate the royal crown stolen from the castle treasury.", new DateTime(2025, 10, 18), 5));
     }
 
 
