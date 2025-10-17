@@ -160,7 +160,9 @@ public class Authenticator
 
         using (var smtp = new SmtpClient(AppConfig.SmtpServer, AppConfig.SmtpPort))
         {
+            smtp.UseDefaultCredentials = false; // Viktigt för Gmail!
             smtp.EnableSsl = true;
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtp.Credentials = new NetworkCredential(AppConfig.FromEmail, AppConfig.EmailPassword);
             smtp.Send(message);
         }
