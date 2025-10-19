@@ -136,8 +136,9 @@ public class Authenticator
 
         if (inputCode == code)
         {
-            Console.WriteLine("Login successful! Press any key to continue to Quest Menu.");
+            Console.WriteLine("Login successful! Press any key to assign quests...");
         }
+        
         else
         {
             Console.WriteLine("Invalid code.");

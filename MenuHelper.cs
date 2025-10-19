@@ -9,11 +9,11 @@ public class MenuHelper
         Console.WriteLine("Press 'Q' to exit.");
     }
 
-    public void ShowQuestMenu(User loggedInUser) // Accept the logged-in user
+    public async Task ShowQuestMenu(User loggedInUser) // Accept the logged-in user
     {
         QuestManagment questManagment = new QuestManagment();
         Quest quest = new Quest("", "", DateTime.Now, 1);
-        
+
         bool runningQuestMenu = true;
         while (runningQuestMenu)
         {
@@ -23,7 +23,8 @@ public class MenuHelper
             Console.WriteLine("2. Show All Quests");
             Console.WriteLine("3. Update Quest");
             Console.WriteLine("4. Complete Quest");
-            Console.WriteLine("5. Back to Main Menu");
+            Console.WriteLine("5. Talk to GuildAdvisorAI");
+            Console.WriteLine("6. Back to Main Menu");
             int input = Convert.ToInt32(Console.ReadLine());
 
             switch (input)
@@ -41,6 +42,10 @@ public class MenuHelper
                     questManagment.CompleteQuest(); // Pass the logged-in user
                     break;
                 case 5:
+                    GuildAdviserAI2 guildAdvisorAI2 = new GuildAdviserAI2();
+                    await guildAdvisorAI2.GuildAdviserAIMenu();
+                    break;
+                case 6:
                     return; // Return to main menu 
                 default:
                     Console.WriteLine("Invalid choice. Please try again.");
