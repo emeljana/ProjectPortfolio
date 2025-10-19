@@ -2,7 +2,7 @@
 
 class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
         Console.Clear();
         Console.WriteLine("Hello, welcome to the Adventure Game!");
@@ -26,7 +26,7 @@ class Program
                         Console.WriteLine("Press any key to get assigned quests...");
                         Console.Read();
                         quest.AssignQuestToUser(newUser);
-                        menuHelper.ShowQuestMenu(newUser);
+                        await menuHelper.ShowQuestMenu(newUser);
                     }
                     break;
                 case "2":
@@ -35,7 +35,7 @@ class Program
                     {
                         quest.AssignQuestToUser(loggedInUser);
                         // If login is successful, show the quest menu with the logged-in user
-                        menuHelper.ShowQuestMenu(loggedInUser);
+                        await menuHelper.ShowQuestMenu(loggedInUser);
                     }
                     break;
                 case "Q":
