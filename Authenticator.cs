@@ -25,11 +25,13 @@ public class Authenticator
 
     public User? CreateUser() // Return the created user
     {
+        Console.Clear();
+        Console.WriteLine("--- Create New User ---");
         Console.Write("Enter your username: ");
         user.Username = Console.ReadLine() ?? "";
 
         Console.Write("Enter your password: ");
-        user.Password = Console.ReadLine() ?? "";
+        user.Password = ReadPassword(user) ?? "";
 
         Console.Write("Enter your email: ");
         user.Email = Console.ReadLine() ?? "";
@@ -95,7 +97,7 @@ public class Authenticator
         string inputUsername = Console.ReadLine() ?? "";
 
         Console.Write("Enter your password: ");
-        string inputPassword = Console.ReadLine() ?? "";
+        string inputPassword = ReadPassword(user) ?? "";
 
         // FirstOrDefault method in LINQ to find a user matching the input credentials
         // If a match is found, it returns the user object; otherwise, it returns null
@@ -104,8 +106,7 @@ public class Authenticator
         if (searchUser != null)
         {
             Console.WriteLine("Login successful!");
-            /*TwoFactorAuthentication();*/
-            /*questManagment.AssignQuestToUser(searchUser);*/
+            TwoFactorAuthentication();
             notificationService.GetQuestsNearDeadline(searchUser, questManagment); // Call the method with the logged-in user
             return searchUser; // Return the actual logged-in user
         }
@@ -120,7 +121,7 @@ public class Authenticator
 
     }
 
-    /*public void TwoFactorAuthentication()
+    public void TwoFactorAuthentication()
     {
         // Generate a random code
         var random = new Random();
@@ -135,7 +136,7 @@ public class Authenticator
 
         if (inputCode == code)
         {
-            Console.WriteLine("Login successful! Press any key to assign quests...");
+            Console.WriteLine("Login successful! Press any key to be assigned quests...");
         }
         
         else
@@ -167,7 +168,48 @@ public class Authenticator
             smtp.Send(message);
         }
         Console.WriteLine("Email sent.");
-    }*/
-    
-    
+    }
+
+    private static string? ReadPassword(User user)
+    {
+        // skapar en tom sträng för att lagra användarens lösenord
+        // varje gång användaren trycker på en tangent läggs tecknet till i denna sträng
+        string password = "";
+
+        // läser in tangenttryckningar utan att visa dem i konsolen
+        ConsoleKeyInfo key;
+
+        while (true)
+        {
+            // läser varje tangenttryckning som görs utan att visa den i konsolen
+            // "intercept: true" betyder att tecknet inte visas i konsolen
+            key = Console.ReadKey(intercept: true);
+
+            // kontrollerar om användaren tryckte på Enter-tangenten
+            if (key.Key == ConsoleKey.Enter)
+            {
+                // om ja, görs en radbrytning och loopen avslutas
+                Console.WriteLine();
+                break;
+            }
+
+            // kontrollerar om användaren tryckte på Backspace-tangenten
+            else if (key.Key == ConsoleKey.Backspace)
+            {
+                if (password.Length > 0)
+                {
+                    // tar bort det sista tecknet från lösenordet
+                    password = password.Substring(0, password.Length - 1);
+                    Console.Write("\b \b"); // Ta bort den sista stjärnan
+                }
+            }
+            else
+            {
+                password += key.KeyChar;
+                Console.Write("*"); // visar en stjärna för varje tecken som skrivs
+            }
+
+        }
+        return password;
+    }
 }
