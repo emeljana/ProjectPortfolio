@@ -3,11 +3,13 @@ public class MenuHelper
     // Implement menu-related helper methods here
     public void ShowMenu()
     {
+        Console.Clear();
         Console.WriteLine("Menu:");
         Console.WriteLine("1. Create User");
         Console.WriteLine("2. Log In");
         Console.WriteLine("Press 'Q' to exit.");
     }
+    
 
     public async Task ShowQuestMenu(User loggedInUser) // Accept the logged-in user
     {
@@ -42,8 +44,8 @@ public class MenuHelper
                     questManagment.CompleteQuest(); // Pass the logged-in user
                     break;
                 case 5:
-                    GuildAdviserAI2 guildAdvisorAI2 = new GuildAdviserAI2();
-                    await guildAdvisorAI2.GuildAdviserAIMenu();
+                    GuildAdvisorAI guildAdvisorAI = new GuildAdvisorAI();
+                    await guildAdvisorAI.GuildAdvisorAItest();
                     break;
                 case 6:
                     return; // Return to main menu 
