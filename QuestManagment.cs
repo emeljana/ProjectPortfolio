@@ -149,13 +149,21 @@ public class QuestManagment
     // Method to assign random quests to a user
     public void AssignQuestToUser(User loggedInUser) // Accept the logged-in user
     {
-        Console.Clear();
+        Console.WriteLine($"DEBUG: AssignQuestToUser called for {loggedInUser.Username}");
+        Console.WriteLine($"DEBUG: User currently has {loggedInUser.ActiveQuests.Count} active quests");
+        
         if (loggedInUser.ActiveQuests.Count > 0)
         {
             Console.WriteLine("You already have active quests assigned.");
+            Console.WriteLine("DEBUG: Existing quests:");
+            foreach (var existingQuest in loggedInUser.ActiveQuests)
+            {
+                Console.WriteLine($"DEBUG: - {existingQuest.Title}");
+            }
         }
         else
         {
+            Console.WriteLine("DEBUG: Assigning new quests...");
             int questAmount = GetRandomQuestAmount(); // Use the method we created
             Random randomQuest = new Random();
 
@@ -172,12 +180,15 @@ public class QuestManagment
                 }
                 // Assign the quest to the user
                 Quest assignedQuest = ToDoList[questIndex];
+                Console.WriteLine($"DEBUG: Adding quest '{assignedQuest.Title}' to {loggedInUser.Username}");
                 AddQuestToUser(loggedInUser, assignedQuest); // Pass both user and quest
             }
+            
+            Console.WriteLine($"DEBUG: After assignment, user has {loggedInUser.ActiveQuests.Count} active quests");
         }
         Console.WriteLine("Press any key to continue...");
-        Console.Read();
-
+        Console.ReadKey();
+        Console.WriteLine(); // Ny rad efter ReadKey
     }
 
     // Helper method to assign a quest to a user

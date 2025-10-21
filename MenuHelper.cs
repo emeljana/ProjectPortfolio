@@ -46,7 +46,7 @@ public class MenuHelper
                     Console.WriteLine("Invalid choice.");
                     break;
             }
-            Console.Clear();
+
         }
     }
 
