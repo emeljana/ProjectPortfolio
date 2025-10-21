@@ -25,6 +25,7 @@ public class Quest
             System.Console.WriteLine("Due Date: " + quest.DueDate);
             System.Console.WriteLine("Priority: " + quest.Priority);
             System.Console.WriteLine("Is Completed: " + quest.IsCompleted);
+            System.Console.WriteLine("-----------------------------------");
         }
     }
 }

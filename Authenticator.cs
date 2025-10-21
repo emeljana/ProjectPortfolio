@@ -23,6 +23,7 @@ public class Authenticator
     User user = new User("", "", "");
     MenuHelper menuHelper = new MenuHelper();
     QuestManagment questManagment = new QuestManagment();
+    Quest quest = new Quest("", "", DateTime.Now, 1);
 
     public User? CreateUser() // Return the created user
     {
@@ -107,7 +108,8 @@ public class Authenticator
         {
             Console.WriteLine("Login successful!");
             TwoFactorAuthentication();
-            notificationService.GetQuestsNearDeadline(searchUser); // Call the method with the logged-in user
+            /*questManagment.AssignQuestToUser(searchUser);*/
+            notificationService.GetQuestsNearDeadline(searchUser, questManagment); // Call the method with the logged-in user
             return searchUser; // Return the actual logged-in user
         }
 

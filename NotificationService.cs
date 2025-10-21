@@ -4,21 +4,26 @@ using System.Net;
 public class NotificationService
 {
     // send email when quests is under 24 hours left
-    QuestManagment questManagment = new QuestManagment();
 
-    public bool GetQuestsNearDeadline(User loggedInUser)
+
+    public bool GetQuestsNearDeadline(User loggedInUser, QuestManagment quest)
     {
         DateTime rightNow = DateTime.Now;
-        foreach (var quest in questManagment.ToDoList)
+        bool foundAnyQuests = false;
+        
+        // Gå igenom användarens AKTIVA quests istället för alla quests
+        foreach (var item in loggedInUser.ActiveQuests)
         {
             // loop through quests and check if any are due in less than 24 hours
-            if (quest.DueDate - rightNow < TimeSpan.FromHours(24))
+            if (item.DueDate - rightNow < TimeSpan.FromHours(24))
             {
-                SendEmailNotification(quest, loggedInUser);
-                return true;
+                SendEmailNotification(item, loggedInUser);
+                foundAnyQuests = true; // Found at least one quest
+                // returna inte här eftersom om det finns flera quests nära deadline så ska den skicka email för alla
+                // och return avslutar metoden 
             }
         }
-        return false;
+        return foundAnyQuests;
     }
 
     private void SendEmailNotification(Quest quest, User loggedInUser)

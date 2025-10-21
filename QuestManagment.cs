@@ -5,17 +5,17 @@ public class QuestManagment
 
     public QuestManagment()
     {
-        ToDoList.Add(new Quest("Slay the Dragon", "Defeat the dragon terrorizing the village", new DateTime(2025, 10, 18), 5));
-        ToDoList.Add(new Quest("Rescue the Princess", "Save the princess from the evil warlock", new DateTime(2025, 10, 18), 4));
-        ToDoList.Add(new Quest("Find the Lost Artifact", "Locate and retrieve the ancient artifact", new DateTime(2025, 10, 18), 3));
+        ToDoList.Add(new Quest("Slay the Dragon", "Defeat the dragon terrorizing the village", new DateTime(2025, 10, 21), 5));
+        ToDoList.Add(new Quest("Rescue the Princess", "Save the princess from the evil warlock", new DateTime(2025, 10, 21), 4));
+        ToDoList.Add(new Quest("Find the Lost Artifact", "Locate and retrieve the ancient artifact", new DateTime(2025, 10, 21), 3));
         ToDoList.Add(new Quest("Explore the Haunted Forest", "Investigate the mysterious occurrences in the forest", new DateTime(2025, 10, 18), 2));
-        ToDoList.Add(new Quest("Find the lost Crown", "Locate the royal crown stolen from the castle treasury.", new DateTime(2025, 10, 18), 5));
+        ToDoList.Add(new Quest("Find the lost Crown", "Locate the royal crown stolen from the castle treasury.", new DateTime(2025, 10, 21), 5));
     }
 
 
     public void AddQuest()
     {
-        Console.Write("Enter quest title: ");
+        Console.Write("Enter a new quest title: ");
         string title = Console.ReadLine() ?? "";
         Console.Write("Enter quest description: ");
         string description = Console.ReadLine() ?? "";
@@ -91,6 +91,7 @@ public class QuestManagment
     // Method to assign random quests to a user
     public void AssignQuestToUser(User loggedInUser) // Accept the logged-in user
     {
+        Console.Clear();
         if (loggedInUser.ActiveQuests.Count > 0)
         {
             Console.WriteLine("You already have active quests assigned.");
@@ -105,7 +106,12 @@ public class QuestManagment
             for (int i = 0; i < questAmount; i++)
             {
                 // Select a random quest from the ToDoList
+                // user cant be assigned the same quest twice
                 int questIndex = randomQuest.Next(ToDoList.Count);
+                while (loggedInUser.ActiveQuests.Contains(ToDoList[questIndex]))
+                {
+                    questIndex = randomQuest.Next(ToDoList.Count);
+                }
                 // Assign the quest to the user
                 Quest assignedQuest = ToDoList[questIndex];
                 AddQuestToUser(loggedInUser, assignedQuest); // Pass both user and quest
@@ -140,6 +146,7 @@ public class QuestManagment
                 Console.WriteLine("Due Date: " + quest.DueDate);
                 Console.WriteLine("Priority: " + quest.Priority);
                 Console.WriteLine("Is Completed: " + quest.IsCompleted);
+                Console.WriteLine("-----------------------------------");
             }
         }
         Console.WriteLine("Press any key to continue...");
