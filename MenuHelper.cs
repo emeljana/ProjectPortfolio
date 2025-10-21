@@ -22,8 +22,9 @@ public class MenuHelper
                     User? newUser = authenticator.CreateUser();
                     if (newUser != null)
                     {
-                        Console.WriteLine("Press any key to get assigned quests...");
-                        Console.Read();
+                        Console.Clear();
+                        Console.WriteLine("Please log in to continue.");
+                        authenticator.LogIn();
                         quest.AssignQuestToUser(newUser);
                         await ShowQuestMenu(newUser);
                     }
@@ -37,6 +38,7 @@ public class MenuHelper
                     }
                     break;
                 case "Q":
+                case "q":
                     Console.WriteLine("Exiting the program. Goodbye!");
                     programRunning = false;
                     break;
