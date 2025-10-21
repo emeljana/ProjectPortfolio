@@ -8,14 +8,15 @@ public class NotificationService
 
     public bool GetQuestsNearDeadline(User loggedInUser, QuestManagment quest)
     {
-        DateTime rightNow = DateTime.Now;
+        DateOnly rightNow = DateOnly.FromDateTime(DateTime.Now);
         bool foundAnyQuests = false;
         
         // Gå igenom användarens AKTIVA quests istället för alla quests
         foreach (var item in loggedInUser.ActiveQuests)
         {
-            // loop through quests and check if any are due in less than 24 hours
-            if (item.DueDate - rightNow < TimeSpan.FromHours(24))
+            int DaysLeft = (item.DueDate.DayNumber - rightNow.DayNumber);
+            // loop through quests and check if any are due in less than 24 hours and more than 0 hours
+            if (DaysLeft < 1 && DaysLeft >= 0)
             {
                 SendEmailNotification(item, loggedInUser);
                 foundAnyQuests = true; // Found at least one quest

@@ -25,7 +25,7 @@ public async Task GuildAdvisorAItest()
         new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
 
     Console.Write("Enter your message for the Guild Advisor AI: ");
-    string userMessage = Console.ReadLine();
+    string userMessage = Console.ReadLine() ?? "";
 
     var question = new
     {
