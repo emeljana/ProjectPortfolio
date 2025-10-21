@@ -5,79 +5,137 @@ public class QuestManagment
 
     public QuestManagment()
     {
-        ToDoList.Add(new Quest("Slay the Dragon", "Defeat the dragon terrorizing the village", new DateTime(2025, 10, 21), 5));
-        ToDoList.Add(new Quest("Rescue the Princess", "Save the princess from the evil warlock", new DateTime(2025, 10, 21), 4));
-        ToDoList.Add(new Quest("Find the Lost Artifact", "Locate and retrieve the ancient artifact", new DateTime(2025, 10, 21), 3));
-        ToDoList.Add(new Quest("Explore the Haunted Forest", "Investigate the mysterious occurrences in the forest", new DateTime(2025, 10, 18), 2));
-        ToDoList.Add(new Quest("Find the lost Crown", "Locate the royal crown stolen from the castle treasury.", new DateTime(2025, 10, 21), 5));
+        ToDoList.Add(new Quest("Slay the Dragon", "Defeat the dragon terrorizing the village", new DateOnly(2025, 10, 21), 5));
+        ToDoList.Add(new Quest("Rescue the Princess", "Save the princess from the evil warlock", new DateOnly(2025, 10, 21), 4));
+        ToDoList.Add(new Quest("Find the Lost Artifact", "Locate and retrieve the ancient artifact", new DateOnly(2025, 10, 21), 3));
+        ToDoList.Add(new Quest("Explore the Haunted Forest", "Investigate the mysterious occurrences in the forest", new DateOnly(2025, 10, 18), 2));
+        ToDoList.Add(new Quest("Find the lost Crown", "Locate the royal crown stolen from the castle treasury.", new DateOnly(2025, 10, 21), 5));
     }
-
 
     public void AddQuest()
     {
         Console.Write("Enter a new quest title: ");
-        string title = Console.ReadLine() ?? "";
+        string inputTitle = Console.ReadLine() ?? "";
         Console.Write("Enter quest description: ");
-        string description = Console.ReadLine() ?? "";
-        Console.Write("Enter quest due date and time (YYYY-MM-DD HH:MM): ");
-        DateTime dueDate = DateTime.Parse(Console.ReadLine() ?? "");
-        if (dueDate < DateTime.Now)
+        string inputDescription = Console.ReadLine() ?? "";
+        Console.Write("Enter quest due date (YYYY-MM-DD): ");
+        DateOnly inputDueDate = DateOnly.Parse(Console.ReadLine() ?? "");
+        if (inputDueDate < DateOnly.FromDateTime(DateTime.Now))
         {
+            // vad gör denna kod
             Console.WriteLine("Invalid due date. Please enter a future date: ");
-            dueDate = DateTime.Parse(Console.ReadLine() ?? "");
+            inputDueDate = DateOnly.Parse(Console.ReadLine() ?? "");
         }
         Console.Write("Enter quest priority (1-5):");
-        int priority = Convert.ToInt32(Console.ReadLine());
+        int inputPriority = Convert.ToInt32(Console.ReadLine());
+        if (inputPriority < 1 || inputPriority > 5)
+        {
+            Console.WriteLine("Invalid priority. Please enter a priority between 1 and 5.");
+            inputPriority = Convert.ToInt32(Console.ReadLine());
+        }
 
         // Create a new Quest object and add it to the ToDoList
         // Detta kallas att instantiera ett objekt
-        ToDoList.Add(new Quest(title, description, dueDate, priority));
+        ToDoList.Add(new Quest(inputTitle, inputDescription, inputDueDate, inputPriority));
         Console.WriteLine("Quest created successfully!");
     }
 
-    public void CompleteQuest() // Accept the logged-in user
+    public void CompleteQuest(User loggedInUser) // Accept the logged-in user
     {
-        System.Console.WriteLine("Which quest would you like to mark as completed?");
-        string title = Console.ReadLine() ?? "";
-        foreach (var item in ToDoList)
+        Console.Clear();
+        if (loggedInUser.ActiveQuests.Count == 0)
         {
-            if (item.Title == title)
+            System.Console.WriteLine("You have no active quests.");
+            return; // Stop the method if no active quests
+        }
+        System.Console.WriteLine("Which quest would you like to mark as completed? Enter the number:");
+        // list the user's active quests with numbers
+        for (int i = 0; i < loggedInUser.ActiveQuests.Count; i++)
+        {
+            // (i+1) to show numbers starting from 1 instead of 0
+            Console.WriteLine(i + 1 + ". " + loggedInUser.ActiveQuests[i].Title);
+        }
+        string inputCompleteChoice = Console.ReadLine() ?? "";
+        
+        if (int.TryParse(inputCompleteChoice, out int choice))
+        {
+            choice = choice - 1; // Adjust for zero-based index
+
+            if (choice >= 0 && choice < loggedInUser.ActiveQuests.Count)
             {
-                item.IsCompleted = true;
-                System.Console.WriteLine("Quest marked as completed.");
-                return;
-            }
-            else
-            {
-                System.Console.WriteLine("Quest not found.");
+                Quest quest = loggedInUser.ActiveQuests[choice];
+                quest.IsCompleted = true;
+                System.Console.WriteLine("Quest " + quest.Title + " marked as completed.");
+                loggedInUser.ActiveQuests.RemoveAt(choice); // Remove the completed quest from active quests
             }
         }
-    }
-    public void UpdateQuest()
-    {
-        System.Console.WriteLine("Which quest would you like to update?");
-        string title = Console.ReadLine() ?? "";
-        foreach (var item in ToDoList)
+        else
         {
-            if (item.Title == title)
+            System.Console.WriteLine("Quest not found in your active quests.");
+        }
+    }
+
+    public void UpdateQuest(User loggedInUser) // Accept the logged-in user
+    {
+        Console.Clear();
+        if (loggedInUser.ActiveQuests.Count == 0)
+        {
+            System.Console.WriteLine("You have no active quests to update.");
+            return; // Stop the method if no active quests
+        }
+        System.Console.WriteLine("Which quest would you like to update?");
+        for (int i = 0; i < loggedInUser.ActiveQuests.Count; i++)
+        {
+            Console.WriteLine(i + 1 + ". " + loggedInUser.ActiveQuests[i].Title);
+        }
+        string inputUpdateChoice = Console.ReadLine() ?? "";
+
+        if (int.TryParse(inputUpdateChoice, out int choiceUpdate))
+        {
+            choiceUpdate = choiceUpdate - 1;
+            if (choiceUpdate >= 0 && choiceUpdate < loggedInUser.ActiveQuests.Count)
             {
-                System.Console.WriteLine("Enter a new description for the quest:");
-                item.Description = Console.ReadLine() ?? "";
-                System.Console.WriteLine("Enter a new due date for the quest:");
-                item.DueDate = DateTime.Parse(Console.ReadLine() ?? "");
-                if (item.DueDate < DateTime.Now)
+                Quest quest = loggedInUser.ActiveQuests[choiceUpdate];
+                Console.WriteLine("Choose which field to update:");
+                Console.WriteLine("1. Description");
+                Console.WriteLine("2. Due Date");
+                Console.WriteLine("3. Priority");
+                string fieldChoice = Console.ReadLine() ?? "";
+
+                if (fieldChoice == "1")
                 {
-                    Console.WriteLine("Invalid due date. Please enter a future date: ");
-                    item.DueDate = DateTime.Parse(Console.ReadLine() ?? "");
+                    Console.WriteLine("Enter new description:");
+                    quest.Description = Console.ReadLine() ?? "";
+                    Console.WriteLine("Quest " + quest.Title + " description updated successfully!");
                 }
-                System.Console.WriteLine("Enter a new priority for the quest (1-5):");
-                item.Priority = Convert.ToInt32(Console.ReadLine());
-                System.Console.WriteLine("Quest updated.");
-                return;
-            }
-            else
-            {
-                System.Console.WriteLine("Quest not found.");
+                
+                else if (fieldChoice == "2")
+                {
+                    Console.WriteLine("Enter new due date (YYYY-MM-DD):");
+                    DateOnly newDueDate = DateOnly.Parse(Console.ReadLine() ?? "");
+                    if (newDueDate < DateOnly.FromDateTime(DateTime.Now))
+                    {
+                        Console.WriteLine("Invalid due date. Please enter a future date: ");
+                        newDueDate = DateOnly.Parse(Console.ReadLine() ?? "");
+                    }
+                    quest.DueDate = newDueDate;
+                    Console.WriteLine("Quest " + quest.Title + " updated successfully to due date " + quest.DueDate + "!");
+                }
+                else if (fieldChoice == "3")
+                {
+                    Console.WriteLine("Enter new priority (1-5):");
+                    quest.Priority = Convert.ToInt32(Console.ReadLine());
+                    if (quest.Priority < 1 || quest.Priority > 5)
+                    {
+                        Console.WriteLine("Invalid priority. Please enter a priority between 1 and 5.");
+                        quest.Priority = Convert.ToInt32(Console.ReadLine());
+                    }
+                    Console.WriteLine("Quest " + quest.Title + " updated successfully to priority " + quest.Priority + "!");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid choice.");
+                }
             }
         }
     }
@@ -91,7 +149,6 @@ public class QuestManagment
     // Method to assign random quests to a user
     public void AssignQuestToUser(User loggedInUser) // Accept the logged-in user
     {
-        Console.Clear();
         if (loggedInUser.ActiveQuests.Count > 0)
         {
             Console.WriteLine("You already have active quests assigned.");
@@ -128,10 +185,10 @@ public class QuestManagment
         user.ActiveQuests.Add(quest); // Actually add the quest to the users list
         Console.WriteLine("Quest '" + quest.Title + "' has been assigned to " + user.Username);
     }
-
-    Quest quest = new Quest("", "", DateTime.Now, 1);
+    
     public void ShowMyQuest(User loggedInUser) // Accept the logged-in user
     {
+        Console.Clear();
         if (loggedInUser.ActiveQuests.Count == 0)
         {
             Console.WriteLine("You have no active quests.");
