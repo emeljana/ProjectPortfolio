@@ -1,20 +1,57 @@
+using System.Threading.Tasks;
+
 public class MenuHelper
 {
+    QuestManagment quest = new QuestManagment();
     // Implement menu-related helper methods here
-    public void ShowMenu()
+    public async Task ShowMenu(Authenticator authenticator)
     {
-        Console.Clear();
-        Console.WriteLine("Menu:");
-        Console.WriteLine("1. Create User");
-        Console.WriteLine("2. Log In");
-        Console.WriteLine("Press 'Q' to exit.");
+        bool programRunning = true;
+        while (programRunning)
+        {
+            Console.Clear();
+            Console.WriteLine("Menu:");
+            Console.WriteLine("1. Create User");
+            Console.WriteLine("2. Log In");
+            Console.WriteLine("Press 'Q' to exit.");
+            
+            string inputChoice = Console.ReadLine() ?? "";
+            
+            switch (inputChoice)
+            {
+                case "1":
+                    User? newUser = authenticator.CreateUser();
+                    if (newUser != null)
+                    {
+                        Console.WriteLine("Press any key to get assigned quests...");
+                        Console.Read();
+                        quest.AssignQuestToUser(newUser);
+                        await ShowQuestMenu(newUser);
+                    }
+                    break;
+                case "2":
+                    User? loggedInUser = authenticator.LogIn();
+                    if (loggedInUser != null)
+                    {
+                        quest.AssignQuestToUser(loggedInUser);
+                        await ShowQuestMenu(loggedInUser);
+                    }
+                    break;
+                case "Q":
+                    Console.WriteLine("Exiting the program. Goodbye!");
+                    programRunning = false;
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    break;
+            }
+        }
     }
-    
 
     public async Task ShowQuestMenu(User loggedInUser) // Accept the logged-in user
     {
         QuestManagment questManagment = new QuestManagment();
-        Quest quest = new Quest("", "", DateTime.Now, 1);
+        Quest quest = new Quest("", "", DateOnly.FromDateTime(DateTime.Now), 1);
 
         bool runningQuestMenu = true;
         while (runningQuestMenu)

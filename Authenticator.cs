@@ -21,9 +21,8 @@ public class Authenticator
         usersList.Add(new User("Alice", "Alice123!", "alice@example.com"));
     }
     User user = new User("", "", "");
-    MenuHelper menuHelper = new MenuHelper();
     QuestManagment questManagment = new QuestManagment();
-    Quest quest = new Quest("", "", DateTime.Now, 1);
+    Quest quest = new Quest("", "", DateOnly.FromDateTime(DateTime.Now), 1);
 
     public User? CreateUser() // Return the created user
     {
@@ -107,7 +106,7 @@ public class Authenticator
         if (searchUser != null)
         {
             Console.WriteLine("Login successful!");
-            TwoFactorAuthentication();
+            /*TwoFactorAuthentication();*/
             /*questManagment.AssignQuestToUser(searchUser);*/
             notificationService.GetQuestsNearDeadline(searchUser, questManagment); // Call the method with the logged-in user
             return searchUser; // Return the actual logged-in user
@@ -123,7 +122,7 @@ public class Authenticator
         
     }
 
-    public void TwoFactorAuthentication()
+    /*public void TwoFactorAuthentication()
     {
         // Generate a random code
         var random = new Random();
@@ -170,5 +169,5 @@ public class Authenticator
             smtp.Send(message);
         }
         Console.WriteLine("Email sent.");
-    }
+    }*/
 }
