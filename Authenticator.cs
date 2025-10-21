@@ -12,7 +12,7 @@ using Twilio.Rest.Api.V2010.Account;
 public class Authenticator
 {
     public static List<User> usersList = new List<User>();
-    NotificationService notificationService = new NotificationService();
+
 
     public Authenticator()
     {
@@ -21,7 +21,6 @@ public class Authenticator
         usersList.Add(new User("Alice", "Alice123!", "alice@example.com"));
     }
     User user = new User("", "", "");
-    QuestManagment questManagment = new QuestManagment();
 
     public User? CreateUser() // Return the created user
     {
@@ -107,7 +106,6 @@ public class Authenticator
         {
             Console.WriteLine("Login successful!");
             TwoFactorAuthentication();
-            notificationService.GetQuestsNearDeadline(searchUser, questManagment); // Call the method with the logged-in user
             return searchUser; // Return the actual logged-in user
         }
 
@@ -117,8 +115,6 @@ public class Authenticator
             Console.Read();
             return null; // Return null if login fails
         }
-
-
     }
 
     public void TwoFactorAuthentication()
