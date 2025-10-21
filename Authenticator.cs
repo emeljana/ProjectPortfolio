@@ -22,7 +22,6 @@ public class Authenticator
     }
     User user = new User("", "", "");
     QuestManagment questManagment = new QuestManagment();
-    Quest quest = new Quest("", "", DateOnly.FromDateTime(DateTime.Now), 1);
 
     public User? CreateUser() // Return the created user
     {
@@ -45,7 +44,6 @@ public class Authenticator
         return null; // Return null if validation failed
         
     }
-
 
     public bool ValidatePassword(User user)
     {
@@ -119,7 +117,7 @@ public class Authenticator
             return null; // Return null if login fails
         }
 
-        
+
     }
 
     /*public void TwoFactorAuthentication()
@@ -170,4 +168,6 @@ public class Authenticator
         }
         Console.WriteLine("Email sent.");
     }*/
+    
+    
 }
