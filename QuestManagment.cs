@@ -149,6 +149,7 @@ public class QuestManagment
     // Method to assign random quests to a user
     public void AssignQuestToUser(User loggedInUser) // Accept the logged-in user
     {
+        Console.Clear();
         if (loggedInUser.ActiveQuests.Count > 0)
         {
             Console.WriteLine("You already have active quests assigned.");
@@ -185,7 +186,7 @@ public class QuestManagment
         user.ActiveQuests.Add(quest); // Actually add the quest to the users list
         Console.WriteLine("Quest '" + quest.Title + "' has been assigned to " + user.Username);
     }
-    
+
     public void ShowMyQuest(User loggedInUser) // Accept the logged-in user
     {
         Console.Clear();
