@@ -5,9 +5,7 @@ using System.Net.Mail;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Security.Cryptography;
-using Twilio;
-using Twilio.Types;
-using Twilio.Rest.Api.V2010.Account;
+
 
 public class Authenticator
 {
@@ -90,8 +88,10 @@ public class Authenticator
         }
     }
 
-    public User? LogIn() // Return the logged-in user, ? means it can be null
+    public User? LogIn() // Return the logged-in user to User class, ? means it can be null
     {
+        Console.Clear();
+        Console.WriteLine("--- Log In ---");
         Console.Write("Enter your username: ");
         string inputUsername = Console.ReadLine() ?? "";
 
@@ -104,7 +104,8 @@ public class Authenticator
 
         if (searchUser != null)
         {
-            Console.WriteLine("Login successful!");
+            Console.WriteLine("Login successful! Press enter to continue to 2FA...");
+            Console.ReadLine(); // Wait for user to press enter
             TwoFactorAuthentication();
             return searchUser; // Return the actual logged-in user
         }
@@ -119,6 +120,8 @@ public class Authenticator
 
     public void TwoFactorAuthentication()
     {
+        Console.Clear();
+        Console.WriteLine("--- Two-Factor Authentication ---");
         // Generate a random code
         var random = new Random();
         string code = random.Next(100000, 999999).ToString();

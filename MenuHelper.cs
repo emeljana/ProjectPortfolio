@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 public class MenuHelper
 {
     QuestManagment quest = new QuestManagment();
+    NotificationService notificationService = new NotificationService();
+    public User? loggedInUser { get; set; } // Lägg till som property
     // Implement menu-related helper methods here
     public async Task ShowMenu(Authenticator authenticator)
     {
@@ -24,16 +26,24 @@ public class MenuHelper
                     {
                         Console.Clear();
                         Console.WriteLine("Please log in to continue.");
-                        authenticator.LogIn();
-                        quest.AssignQuestToUser(newUser);
-                        await ShowQuestMenu(newUser);
+                        User? loginResult = authenticator.LogIn();
+                        if (loginResult != null)
+                        {
+                            // this - används för att skilja mellan property och lokal variabel, så jag säger att detta är en property
+                            this.loggedInUser = loginResult; // Assign to property
+                            quest.AssignQuestToUser(loginResult);
+                            await ShowQuestMenu(loginResult);
+                        }
                     }
                     break;
                 case "2":
                     User? loggedInUser = authenticator.LogIn();
                     if (loggedInUser != null)
                     {
+                        // this - just här sparar jag den inloggade användaren i propertyn
+                        this.loggedInUser = loggedInUser; // Assign to property
                         quest.AssignQuestToUser(loggedInUser);
+                        notificationService.CheckQuestDueDates(quest, this); // this = loggedInUser
                         await ShowQuestMenu(loggedInUser);
                     }
                     break;
@@ -53,7 +63,7 @@ public class MenuHelper
     public async Task ShowQuestMenu(User loggedInUser) // Accept the logged-in user
     {
         QuestManagment questManagment = new QuestManagment();
-        Quest quest = new Quest("", "", DateOnly.FromDateTime(DateTime.Now), 1);
+        Quest quest = new Quest("", "", DateTime.Now, 1);
 
         bool runningQuestMenu = true;
         while (runningQuestMenu)

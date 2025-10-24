@@ -5,11 +5,11 @@ public class QuestManagment
 
     public QuestManagment()
     {
-        ToDoList.Add(new Quest("Slay the Dragon", "Defeat the dragon terrorizing the village", new DateOnly(2025, 10, 21), 5));
-        ToDoList.Add(new Quest("Rescue the Princess", "Save the princess from the evil warlock", new DateOnly(2025, 10, 21), 4));
-        ToDoList.Add(new Quest("Find the Lost Artifact", "Locate and retrieve the ancient artifact", new DateOnly(2025, 10, 21), 3));
-        ToDoList.Add(new Quest("Explore the Haunted Forest", "Investigate the mysterious occurrences in the forest", new DateOnly(2025, 10, 18), 2));
-        ToDoList.Add(new Quest("Find the lost Crown", "Locate the royal crown stolen from the castle treasury.", new DateOnly(2025, 10, 21), 5));
+        ToDoList.Add(new Quest("Slay the Dragon", "Defeat the dragon terrorizing the village", new DateTime(2025, 10, 24), 5));
+        ToDoList.Add(new Quest("Rescue the Princess", "Save the princess from the evil warlock", new DateTime(2025, 10, 25), 4));
+        ToDoList.Add(new Quest("Find the Lost Artifact", "Locate and retrieve the ancient artifact", new DateTime(2025, 10, 24), 3));
+        ToDoList.Add(new Quest("Explore the Haunted Forest", "Investigate the mysterious occurrences in the forest", new DateTime(2025, 10, 25), 2));
+        ToDoList.Add(new Quest("Find the lost Crown", "Locate the royal crown stolen from the castle treasury.", new DateTime(2025, 10, 24), 5));
     }
 
     public void AddQuest()
@@ -19,12 +19,12 @@ public class QuestManagment
         Console.Write("Enter quest description: ");
         string inputDescription = Console.ReadLine() ?? "";
         Console.Write("Enter quest due date (YYYY-MM-DD): ");
-        DateOnly inputDueDate = DateOnly.Parse(Console.ReadLine() ?? "");
-        if (inputDueDate < DateOnly.FromDateTime(DateTime.Now))
+        DateTime inputDueDate = DateTime.Parse(Console.ReadLine() ?? "");
+        if (inputDueDate < DateTime.Now)
         {
             // vad gör denna kod
             Console.WriteLine("Invalid due date. Please enter a future date: ");
-            inputDueDate = DateOnly.Parse(Console.ReadLine() ?? "");
+            inputDueDate = DateTime.Parse(Console.ReadLine() ?? "");
         }
         Console.Write("Enter quest priority (1-5):");
         int inputPriority = Convert.ToInt32(Console.ReadLine());
@@ -112,11 +112,11 @@ public class QuestManagment
                 else if (fieldChoice == "2")
                 {
                     Console.WriteLine("Enter new due date (YYYY-MM-DD):");
-                    DateOnly newDueDate = DateOnly.Parse(Console.ReadLine() ?? "");
-                    if (newDueDate < DateOnly.FromDateTime(DateTime.Now))
+                    DateTime newDueDate = DateTime.Parse(Console.ReadLine() ?? "");
+                    if (newDueDate < DateTime.Now)
                     {
                         Console.WriteLine("Invalid due date. Please enter a future date: ");
-                        newDueDate = DateOnly.Parse(Console.ReadLine() ?? "");
+                        newDueDate = DateTime.Parse(Console.ReadLine() ?? "");
                     }
                     quest.DueDate = newDueDate;
                     Console.WriteLine("Quest " + quest.Title + " updated successfully to due date " + quest.DueDate + "!");
@@ -149,21 +149,13 @@ public class QuestManagment
     // Method to assign random quests to a user
     public void AssignQuestToUser(User loggedInUser) // Accept the logged-in user
     {
-        Console.WriteLine($"DEBUG: AssignQuestToUser called for {loggedInUser.Username}");
-        Console.WriteLine($"DEBUG: User currently has {loggedInUser.ActiveQuests.Count} active quests");
-        
+        Console.Clear();
         if (loggedInUser.ActiveQuests.Count > 0)
         {
             Console.WriteLine("You already have active quests assigned.");
-            Console.WriteLine("DEBUG: Existing quests:");
-            foreach (var existingQuest in loggedInUser.ActiveQuests)
-            {
-                Console.WriteLine($"DEBUG: - {existingQuest.Title}");
-            }
         }
         else
         {
-            Console.WriteLine("DEBUG: Assigning new quests...");
             int questAmount = GetRandomQuestAmount(); // Use the method we created
             Random randomQuest = new Random();
 
@@ -180,11 +172,8 @@ public class QuestManagment
                 }
                 // Assign the quest to the user
                 Quest assignedQuest = ToDoList[questIndex];
-                Console.WriteLine($"DEBUG: Adding quest '{assignedQuest.Title}' to {loggedInUser.Username}");
                 AddQuestToUser(loggedInUser, assignedQuest); // Pass both user and quest
             }
-            
-            Console.WriteLine($"DEBUG: After assignment, user has {loggedInUser.ActiveQuests.Count} active quests");
         }
         Console.WriteLine("Press any key to continue...");
         Console.ReadKey();
