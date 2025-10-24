@@ -4,11 +4,11 @@ public class Quest
 {
     public string Title { get; set; }
     public string Description { get; set; }
-    public DateOnly DueDate { get; set; }
+    public DateTime DueDate { get; set; }
     public int Priority { get; set; }
     public bool IsCompleted { get; set; }
 
-    public Quest(string title, string description, DateOnly dueDate, int priority)
+    public Quest(string title, string description, DateTime dueDate, int priority)
     {
         Title = title;
         Description = description;
