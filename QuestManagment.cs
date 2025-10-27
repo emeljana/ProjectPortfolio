@@ -18,22 +18,38 @@ public class QuestManagment
         string inputTitle = Console.ReadLine() ?? "";
         Console.Write("Enter quest description: ");
         string inputDescription = Console.ReadLine() ?? "";
+
         Console.Write("Enter quest due date (YYYY-MM-DD): ");
         DateTime inputDueDate = DateTime.Parse(Console.ReadLine() ?? "");
-        if (inputDueDate < DateTime.Now)
+        bool isValidDate = false;
+        while (!isValidDate)
         {
-            // vad gör denna kod
-            Console.WriteLine("Invalid due date. Please enter a future date: ");
-            inputDueDate = DateTime.Parse(Console.ReadLine() ?? "");
-        }
-        Console.Write("Enter quest priority (1-5):");
-        int inputPriority = Convert.ToInt32(Console.ReadLine());
-        if (inputPriority < 1 || inputPriority > 5)
-        {
-            Console.WriteLine("Invalid priority. Please enter a priority between 1 and 5.");
-            inputPriority = Convert.ToInt32(Console.ReadLine());
+            if (inputDueDate > DateTime.Now)
+            {
+                Console.WriteLine("Invalid due date. Please enter a future date: ");
+                inputDueDate = DateTime.Parse(Console.ReadLine() ?? "");
+            }
+            else
+            {
+                isValidDate = true;
+            }
         }
 
+        Console.Write("Enter quest priority (1-5):");
+        int inputPriority = Convert.ToInt32(Console.ReadLine());
+        bool isValidPriority = false;
+        while (!isValidPriority)
+        {
+
+            if (inputPriority < 1 || inputPriority > 5)
+            {
+                Console.WriteLine("Invalid priority. Please enter a priority between 1 and 5.");
+            }
+            else
+            {
+                isValidPriority = true;
+            }
+        }
         // Create a new Quest object and add it to the ToDoList
         // Detta kallas att instantiera ett objekt
         ToDoList.Add(new Quest(inputTitle, inputDescription, inputDueDate, inputPriority));
@@ -71,7 +87,7 @@ public class QuestManagment
         }
         else
         {
-            System.Console.WriteLine("Quest not found in your active quests.");
+            System.Console.WriteLine("Invalid input.");
         }
     }
 
@@ -113,10 +129,18 @@ public class QuestManagment
                 {
                     Console.WriteLine("Enter new due date (YYYY-MM-DD):");
                     DateTime newDueDate = DateTime.Parse(Console.ReadLine() ?? "");
-                    if (newDueDate < DateTime.Now)
+                    bool isValidDate = false;
+                    while (!isValidDate)
                     {
-                        Console.WriteLine("Invalid due date. Please enter a future date: ");
-                        newDueDate = DateTime.Parse(Console.ReadLine() ?? "");
+                        if (newDueDate < DateTime.Now)
+                        {
+                            Console.WriteLine("Invalid due date. Please enter a future date: ");
+                            newDueDate = DateTime.Parse(Console.ReadLine() ?? "");
+                        }
+                        else
+                        {
+                            isValidDate = true;
+                        }
                     }
                     quest.DueDate = newDueDate;
                     Console.WriteLine("Quest " + quest.Title + " updated successfully to due date " + quest.DueDate + "!");
@@ -125,10 +149,18 @@ public class QuestManagment
                 {
                     Console.WriteLine("Enter new priority (1-5):");
                     quest.Priority = Convert.ToInt32(Console.ReadLine());
-                    if (quest.Priority < 1 || quest.Priority > 5)
+                    bool isValidPriority = false;
+                    while (!isValidPriority)
                     {
-                        Console.WriteLine("Invalid priority. Please enter a priority between 1 and 5.");
-                        quest.Priority = Convert.ToInt32(Console.ReadLine());
+                        if (quest.Priority < 1 || quest.Priority > 5)
+                        {
+                            Console.WriteLine("Invalid priority. Please enter a priority between 1 and 5.");
+                            quest.Priority = Convert.ToInt32(Console.ReadLine());
+                        }
+                        else
+                        {
+                            isValidPriority = true;
+                        }
                     }
                     Console.WriteLine("Quest " + quest.Title + " updated successfully to priority " + quest.Priority + "!");
                 }

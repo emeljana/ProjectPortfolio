@@ -18,74 +18,77 @@ public class Authenticator
         usersList.Add(new User("John", "John123!", "john@example.com"));
         usersList.Add(new User("Alice", "Alice123!", "alice@example.com"));
     }
-    User user = new User("", "", "");
 
-    public User? CreateUser() // Return the created user
+    public User CreateUser() // Return the created user
     {
+        User user = new User("", "", "");
         Console.Clear();
         Console.WriteLine("--- Create New User ---");
         Console.Write("Enter your username: ");
         user.Username = Console.ReadLine() ?? "";
 
         Console.Write("Enter your password: ");
-        user.Password = ReadPassword(user) ?? "";
+        string password = ReadPassword() ?? "";
+
+        // If createUser is true, procced to Login
+        if (ValidatePassword(password))
+        {
+            user.Password = password;
+        }
 
         Console.Write("Enter your email: ");
         user.Email = Console.ReadLine() ?? "";
 
-        // If createUser is true, procced to ShowQuestMenu
-        if (ValidatePassword(user))
-        {
-            usersList.Add(user);
-            Console.WriteLine("Hi " + user.Username + "! Your account has been created.");
-            return user; // Return the created user
-        }
-        return null; // Return null if validation failed
-        
+        usersList.Add(user);
+        Console.WriteLine("Hi " + user.Username + "! Your account has been created. Press enter to continue...");
+        Console.ReadLine();
+        return user; // Return the created user
     }
+    
 
-    public bool ValidatePassword(User user)
+    public bool ValidatePassword(string password)
     {
-        while (true)
+
+        bool correctPassword = false;
+        while (!correctPassword)
         {
-            bool correctPassword = true;
-            if (user.Password.Length < 6)
+            correctPassword = true;
+            if (password.Length < 6)
             {
                 Console.WriteLine("Password must be at least 6 characters long.");
                 correctPassword = false;
             }
-            if (!user.Password.Any(char.IsUpper))
+            if (!password.Any(char.IsUpper))
             {
                 Console.WriteLine("Password must contain at least one uppercase letter.");
                 correctPassword = false;
             }
-            if (!user.Password.Any(char.IsLower))
+            if (!password.Any(char.IsLower))
             {
                 Console.WriteLine("Password must contain at least one lowercase letter.");
                 correctPassword = false;
             }
-            if (!user.Password.Any(char.IsDigit))
+            if (!password.Any(char.IsDigit))
             {
                 Console.WriteLine("Password must contain at least one digit.");
                 correctPassword = false;
             }
-            if (!user.Password.Any(ch => !char.IsLetterOrDigit(ch)))
+            if (!password.Any(ch => !char.IsLetterOrDigit(ch)))
             {
                 Console.WriteLine("Password must contain at least one special character.");
                 correctPassword = false;
             }
-            if (correctPassword)
+            if (!correctPassword)
             {
-                return correctPassword; // Return true if password is valid
+                Console.Write("Please enter a valid password: ");
+                password = ReadPassword() ?? "";
             }
             else
             {
-                Console.Write("Please enter a valid password: ");
-                user.Password = Console.ReadLine() ?? "";
-                Console.WriteLine("Valid password. Press any key to continue...");
-                Console.Read();
+                Console.WriteLine("Valid password.");
             }
         }
+        return correctPassword; // Return true if password is valid
     }
 
     public User? LogIn() // Return the logged-in user to User class, ? means it can be null
@@ -95,40 +98,44 @@ public class Authenticator
         Console.Write("Enter your username: ");
         string inputUsername = Console.ReadLine() ?? "";
 
+        User? searchUser = null;
+
         Console.Write("Enter your password: ");
-        string inputPassword = ReadPassword(user) ?? "";
+        string inputPassword = ReadPassword() ?? "";
 
-        // FirstOrDefault method in LINQ to find a user matching the input credentials
-        // If a match is found, it returns the user object; otherwise, it returns null
-        var searchUser = usersList.FirstOrDefault(u => u.Username == inputUsername && u.Password == inputPassword);
-
-        if (searchUser != null)
+        bool rightLogin = false;
+        while (!rightLogin)
         {
-            Console.WriteLine("Login successful! Press enter to continue to 2FA...");
-            Console.ReadLine(); // Wait for user to press enter
-            TwoFactorAuthentication();
-            return searchUser; // Return the actual logged-in user
+            // FirstOrDefault method in LINQ to find a user matching the input credentials
+            // If a match is found, it returns the user object; otherwise, it returns null
+            searchUser = usersList.FirstOrDefault(u => u.Username == inputUsername && u.Password == inputPassword);
+            
+            if (searchUser != null)
+            {
+                Console.WriteLine("Login successful! Press enter to continue to 2FA...");
+                Console.ReadLine(); // Wait for user to press enter
+                TwoFactorAuthentication(searchUser); // värdet
+                rightLogin = true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid username or password. Please try again.");
+                inputPassword = ReadPassword() ?? "";
+            }
         }
-
-        else
-        {
-            Console.WriteLine("Invalid username or password. Press any key to continue...");
-            Console.Read();
-            return null; // Return null if login fails
-        }
+        return searchUser; // Return the actual logged-in user
     }
 
-    public void TwoFactorAuthentication()
+    public void TwoFactorAuthentication(User user) // objekttypen user
     {
         Console.Clear();
         Console.WriteLine("--- Two-Factor Authentication ---");
         // Generate a random code
         var random = new Random();
         string code = random.Next(100000, 999999).ToString();
-        Console.Write("Enter your email for 2FA: ");
-        string inputEmail = Console.ReadLine() ?? "";
+        Console.Write("An authentication code has been sent to your email.");
 
-        SendEmail(inputEmail, code);
+        SendEmail(user.Email, code);
 
         Console.Write("Enter the code sent to you: ");
         string inputCode = Console.ReadLine() ?? "";
@@ -169,13 +176,13 @@ public class Authenticator
         Console.WriteLine("Email sent.");
     }
 
-    private static string? ReadPassword(User user)
+    private static string? ReadPassword()
     {
         // skapar en tom sträng för att lagra användarens lösenord
         // varje gång användaren trycker på en tangent läggs tecknet till i denna sträng
         string password = "";
 
-        // läser in tangenttryckningar utan att visa dem i konsolen
+        // skapar en variabel för att lagra information om varje tangenttryckning
         ConsoleKeyInfo key;
 
         while (true)

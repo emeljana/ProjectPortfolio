@@ -21,7 +21,7 @@ public class MenuHelper
             switch (inputChoice)
             {
                 case "1":
-                    User? newUser = authenticator.CreateUser();
+                    User newUser = authenticator.CreateUser();
                     if (newUser != null)
                     {
                         Console.Clear();
@@ -40,10 +40,8 @@ public class MenuHelper
                     User? loggedInUser = authenticator.LogIn();
                     if (loggedInUser != null)
                     {
-                        // this - just här sparar jag den inloggade användaren i propertyn
-                        this.loggedInUser = loggedInUser; // Assign to property
                         quest.AssignQuestToUser(loggedInUser);
-                        notificationService.CheckQuestDueDates(quest, this); // this = loggedInUser
+                        notificationService.CheckQuestDueDates(loggedInUser); 
                         await ShowQuestMenu(loggedInUser);
                     }
                     break;

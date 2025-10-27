@@ -108,7 +108,7 @@ public class GuildAdvisorAI
         {
             prompt += "\n" + quest.Title + " - Due Date: " + quest.DueDate;
         }
-        Console.WriteLine(prompt);
+        await GuildAdvisorAIPackage(prompt);
     }
 
     private async Task SummarizeQuestDescription(User loggedInUser)
@@ -125,7 +125,7 @@ public class GuildAdvisorAI
         {
             prompt += "\n" + quest.Title + ": " + quest.Description;
         }
-        Console.WriteLine(prompt);
+        await GuildAdvisorAIPackage(prompt);
     }
 
 
