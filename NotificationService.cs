@@ -4,10 +4,10 @@ using Microsoft.VisualBasic;
 
 public class NotificationService
 {
-    public void CheckQuestDueDates(QuestManagment questManagment, MenuHelper menuHelper)
+    public void CheckQuestDueDates(User user)
     {
-        var userQuests = menuHelper.loggedInUser.ActiveQuests;
-        if (menuHelper.loggedInUser == null)
+        var userQuests = user.ActiveQuests;
+        if (user == null)
         {
             Console.WriteLine("No user is logged in.");
             return;
@@ -16,10 +16,11 @@ public class NotificationService
 
         foreach (var quest in userQuests)
         {
+            // TimeSpan is a class that calculates the difference between two dates
             TimeSpan timeUntilDueDate = quest.DueDate - todaysDate;
             if (timeUntilDueDate.TotalHours <= 24 && !quest.IsCompleted)
             {
-                SendQuestDueDateNotifications(quest, menuHelper.loggedInUser.Email);
+                SendQuestDueDateNotifications(quest, user.Email);
             }
         }
     }
